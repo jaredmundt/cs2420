@@ -3,14 +3,13 @@ Project 2: sort
 
 '''
 
-import math
 import random
 import time
 
 
 def time_function(run_f, args):
     start = time.perf_counter()
-    run_f(args)
+    print(is_sorted(run_f(args)))
     f_time = time.perf_counter() - start
     return f_time
 
@@ -26,58 +25,58 @@ def print_results(nums):
     f_time = time_function(mergesort, nums.copy())
     print(f"mergesort duration: {f_time} seconds.")
     print("starting quicksort")
-    f_time = time_function(quicksort, nums.copy())   
+    f_time = time_function(quicksort, nums.copy())
     print(f"quicksort duration: {f_time} seconds.")
     print("starting timsort ")
     f_time = time_function(timsort, nums.copy())
     print(f"timsort duration: {f_time} seconds.")
 
 
-
 def main():
     random.seed(1111)
-    max_num = 100000000
-    array_len = 10000000
-
-    nums = random.sample(range(max_num), k=array_len)
-    # nums: list = [1,2,3,4,5]
-
+    max_num = 10000000
+    array_len = 10000
+    nums: list[int] = random.sample(range(max_num), k=array_len)
     print_results(nums)
 
 
-
-def quicksort(nums):
+def quicksort(nums: list[int]) -> list[int]:
     nums.sort()
-    nums
+    return nums
 
-def mergesort(nums):
+
+def mergesort(nums: list[int]) -> list[int]:
     nums.sort()
-    nums
+    return nums
 
-def selection_sort(nums):
+
+def selection_sort(nums: list[int]) -> list[int]:
+    for i in range(0, len(nums)):
+        for j in range(i+1, len(nums)):
+            if nums[i] > nums[j]:
+                nums[i], nums[j] = nums[j], nums[i]
+    return nums
+
+
+def insertion_sort(nums: list[int]) -> list[int]:
+    for i in range(0, len(nums)):
+        j = i
+        while j > 0 and nums[j] < nums[j-1]:
+            nums[j-1], nums[j] = nums[j], nums[j-1]
+            j -= 1
+
+    return nums
+
+
+def timsort(nums: list[int]) -> list[int]:
     nums.sort()
-    nums
-
-def insertion_sort(nums):
-    nums.sort()
-    nums
-
-def timsort(nums):
-    nums.sort()
-    nums
-
-def is_sorted(nums):
-    if not isinstance(nums, list):
-        return False
-    max_val = 0
-    for num in nums:
-        if num > max_val:
-            return False
-        if not isinstance(num, int):
-            return False
-    return True
+    return nums
 
 
+def is_sorted(nums) -> bool:
+    if (all(nums[i] <= nums[i + 1] for i in range(len(nums) - 1))):
+        return True
+    return False
 
 
 if __name__ == "__main__":
