@@ -1,15 +1,19 @@
+''' Course Class for Project 3 of cs2420 '''
+
 
 class SList:
+    '''sorted linked list'''
     class SListNode:
         def __init__(self, value=None):
+            '''New list Node'''
             self.value = value
             self.next = None
 
     def __init__(self):
+        '''New slist'''
         self._head = None
         self._size = 0
         self._iter_node = None
-
 
     def insert(self, value):
         '''Insert a new value in the list. Maintain nondecreasing ordering of elements'''
@@ -28,18 +32,16 @@ class SList:
 
         self._head = dummy.next
 
-
     def find(self, value):
         '''Search for a value in the list, return it if found, None otherwise'''
         node = self._head
         while node:
-            if node.value > value:
-                return None
+            # if node.value > value:
+            #     return None
             if node.value == value:
                 return node.value
             node = node.next
         return None
-
 
     def remove(self, value) -> bool:
         '''Remove the first occurance of value.'''
@@ -74,20 +76,18 @@ class SList:
         res += "]"
         return res
 
-
     def __iter__(self):
         '''Return an iterator for the list'''
         self._iter_node = self._head
         return self
 
-        
     def __next__(self):
+        '''return next value and iterate _iter_node'''
         if not self._iter_node:
             raise StopIteration
         value = self._iter_node.value
         self._iter_node = self._iter_node.next
         return value
-
 
     def __getitem__(self, index):
         '''Return the item at the given index, or throw an exception if invalid index'''
@@ -101,6 +101,6 @@ class SList:
             raise Exception("index out of bounds")
         return node.value
 
-
     def __len__(self):
+        '''number of list nodes'''
         return self._size
