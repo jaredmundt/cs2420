@@ -1,9 +1,11 @@
 ''' Course Class for Project 4 of cs2420 '''
 
+
 class Stack:
     '''ADT stack implemented as linked list'''
     class Node:
         '''Node class for linked list'''
+
         def __init__(self, value=None):
             '''New list Node'''
             self._value = value
@@ -42,6 +44,7 @@ class Stack:
         '''remove the top item from the stack and return it. Raise an IndexError if the stack is empty.'''
         if not self._head:
             raise IndexError("stack is empty")
+        self._size -= 1
         node = self._head
         self._head = self._head._next
         return node._value
@@ -49,6 +52,7 @@ class Stack:
     def clear(self):
         '''empty the stack'''
         self._head = None
+        self._size = 0
 
     def top(self) -> any:
         '''return the item on top of the stack without removing it. Raise an IndexError if the stack is empty.'''

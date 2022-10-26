@@ -1,14 +1,16 @@
-from tokenize import Double
 from stack import Stack
 
-def eval_postfix(exp: str) -> str:
+def eval_postfix(exp: str) -> float:
     '''Evaluate a Postfix Expression'''
+    if not isinstance(exp, str):
+        raise ValueError()
     stack = Stack()
-    for char in exp:
-        if char.isnumeric(): 
-            stack.push(int(char))
-        else:
-            match char:
+    print(exp)
+    for c in exp:
+        if c == '/' or c == '*' or c == '-' or c == '+':
+            if stack.size() < 2:
+                raise SyntaxError()
+            match c:
                 case '+':
                     stack.push(stack.pop() + stack.pop())
                 case '-':
@@ -17,16 +19,41 @@ def eval_postfix(exp: str) -> str:
                     stack.push(stack.pop() * stack.pop())
                 case '/':
                     stack.push(stack.pop() / stack.pop())
-    return stack.top()
+        elif c == ' ':
+            pass
+        else:
+            stack.push(float(c))
+    return float(stack.top())
+
 
 def in2post(exp: str) -> str:
     '''convert Infix to Postfix'''
+    if not isinstance(exp, str):
+        raise ValueError()
+    postfix: str = ""
     stack = Stack()
-    for char in exp:
-        if char == '(':
-            stack.push(char)
-        
-    return exp
+    for c in exp:
+        if c == '(':
+            stack.push(c)
+        elif c.isnumeric():
+            postfix += c + ' '
+        elif c == '/' or c == '*' or c == '-' or c == '+':
+            while stack.size() > 0 and stack.top() != '(' and (
+                    stack.top() == '/' or stack.top() == '*' or c == '-' or c == '+'):
+                postfix += stack.pop() + ' '
+            stack.push(c)
+        elif c == ')':
+            postfix += stack.pop() + ' '
+            while stack.top() != '(':
+                postfix += stack.pop() + ' '
+            stack.pop()
+    while stack.size() > 0:
+        if stack.top() == '(' or stack.top() == ')':
+            raise SyntaxError()
+        postfix += stack.pop() + ' '
+
+    return postfix
+
 
 def main():
     file = open("data.txt", "r")
@@ -35,12 +62,14 @@ def main():
     for exp in exps:
         exp = exp.strip()
         print()
-        print(exp)
+        print("infix: " + exp)
         postfix: str = in2post(exp)
-        print(postfix)
-        print(eval_postfix(postfix))
+        print("postfix: " + postfix)
+        answer: str = eval_postfix(postfix)
+        print("answer: " + str(answer))
 
-    file.close() 
+    file.close()
+
 
 if __name__ == "__main__":
     main()
