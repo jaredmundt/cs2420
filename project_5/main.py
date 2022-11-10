@@ -81,7 +81,8 @@ def main():
     ''' Program kicks off here.
 
     '''
-    make_tree()
+    tree = make_tree()
+    print(tree.inorder())
 
 
 if __name__ == "__main__":

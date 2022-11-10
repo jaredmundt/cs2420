@@ -1,5 +1,4 @@
-''' Course Class for Project 4 of cs2420 '''
-
+''' Stack Class for Project 4 of cs2420 '''
 
 class Stack:
     '''ADT stack implemented as linked list'''
@@ -8,8 +7,8 @@ class Stack:
 
         def __init__(self, value=None):
             '''New list Node'''
-            self._value = value
-            self._next = None
+            self.value = value
+            self.next = None
 
     def __init__(self) -> None:
         '''new Stack'''
@@ -26,28 +25,29 @@ class Stack:
         res: str = "["
         node = self._head
         while node:
-            res += node._value.__str__()
+            res += node.value.__str__()
             res += ","
-            node = node._next
+            node = node.next
         res += "]"
         return res
 
     def push(self, item):
         '''push an item onto the stack. Size increases by 1.'''
-        newNode = self.Node(item)
+        new_node = self.Node(item)
         if self._head:
-            newNode._next = self._head
-        self._head = newNode
+            new_node.next = self._head
+        self._head = new_node
         self._size += 1
 
     def pop(self) -> any:
-        '''remove the top item from the stack and return it. Raise an IndexError if the stack is empty.'''
+        '''remove the top item from the stack and return it.
+            Raise an IndexError if the stack is empty.'''
         if not self._head:
             raise IndexError("stack is empty")
         self._size -= 1
         node = self._head
-        self._head = self._head._next
-        return node._value
+        self._head = self._head.next
+        return node.value
 
     def clear(self):
         '''empty the stack'''
@@ -55,8 +55,9 @@ class Stack:
         self._size = 0
 
     def top(self) -> any:
-        '''return the item on top of the stack without removing it. Raise an IndexError if the stack is empty.'''
+        '''return the item on top of the stack without removing it.
+            Raise an IndexError if the stack is empty.'''
         if not self._head:
             raise IndexError("stack is empty")
         node = self._head
-        return node._value
+        return node.value

@@ -1,3 +1,4 @@
+''' Project 4 of cs2420 '''
 from stack import Stack
 
 def eval_postfix(exp: str) -> float:
@@ -5,24 +6,25 @@ def eval_postfix(exp: str) -> float:
     if not isinstance(exp, str):
         raise ValueError()
     stack = Stack()
-    print(exp)
-    for c in exp:
-        if c == '/' or c == '*' or c == '-' or c == '+':
+    for char in exp:
+        if char in ('/', '*', '+', '-'):
             if stack.size() < 2:
                 raise SyntaxError()
-            match c:
+            match char:
                 case '+':
                     stack.push(stack.pop() + stack.pop())
                 case '-':
-                    stack.push(stack.pop() - stack.pop())
+                    first = stack.pop()
+                    stack.push(stack.pop() - first)
                 case '*':
                     stack.push(stack.pop() * stack.pop())
                 case '/':
-                    stack.push(stack.pop() / stack.pop())
-        elif c == ' ':
+                    first = stack.pop()
+                    stack.push(stack.pop() / first)
+        elif char == ' ':
             pass
         else:
-            stack.push(float(c))
+            stack.push(float(char))
     return float(stack.top())
 
 
@@ -32,18 +34,22 @@ def in2post(exp: str) -> str:
         raise ValueError()
     postfix: str = ""
     stack = Stack()
-    for c in exp:
-        if c == '(':
-            stack.push(c)
-        elif c.isnumeric():
-            postfix += c + ' '
-        elif c == '/' or c == '*' or c == '-' or c == '+':
+    for char in exp:
+        if char == '(':
+            stack.push(char)
+        elif char.isnumeric():
+            postfix += char + ' '
+        elif char in ('/', '*', '+', '-'):
             while stack.size() > 0 and stack.top() != '(' and (
-                    stack.top() == '/' or stack.top() == '*' or c == '-' or c == '+'):
+                    stack.top() == '/' or stack.top() == '*' or char == '-' or char == '+'):
                 postfix += stack.pop() + ' '
-            stack.push(c)
-        elif c == ')':
+            stack.push(char)
+        elif char == ')':
+            if stack.size() < 1:
+                raise SyntaxError()
             postfix += stack.pop() + ' '
+            if stack.size() < 1:
+                raise SyntaxError()
             while stack.top() != '(':
                 postfix += stack.pop() + ' '
             stack.pop()
@@ -56,19 +62,18 @@ def in2post(exp: str) -> str:
 
 
 def main():
-    file = open("data.txt", "r")
-    exps = file.readlines()
+    '''open data.txt, convert each expression to postfix, evaluate answer'''
+    with open("data.txt", "r") as file:
+        exps = file.readlines()
 
-    for exp in exps:
-        exp = exp.strip()
-        print()
-        print("infix: " + exp)
-        postfix: str = in2post(exp)
-        print("postfix: " + postfix)
-        answer: str = eval_postfix(postfix)
-        print("answer: " + str(answer))
-
-    file.close()
+        for exp in exps:
+            exp = exp.strip()
+            print()
+            print("infix: " + exp)
+            postfix: str = in2post(exp)
+            print("postfix: " + postfix)
+            answer: str = eval_postfix(postfix)
+            print("answer: " + str(answer))
 
 
 if __name__ == "__main__":

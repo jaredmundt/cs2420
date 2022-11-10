@@ -14,6 +14,7 @@ class BST:
             self.item = item
             self.left = None
             self.right = None
+            self.parent = None
 
     def size(self):
         '''Return the number of nodes in the tree.'''
@@ -58,6 +59,21 @@ class BST:
     def remove(self, item):
         '''Remove item from the tree if it exists, if not - do nothing. Return the resulting tree.'''
         self._size -= 1
+        # if self._root:
+        #     if self._root.item == item:
+
+        # parent = None
+        # node = self._root
+        # while node:
+        #     if node.left:
+        #         if item == node.left.item:
+
+        #     elif item < node.item:
+        #         node = node.left
+        #     else:
+        #         node = node.right
+        #     parent = node
+        # return self
 
     def find(self, item):
         '''Return the matched item. If item is not in the tree, raise a ValueError.'''
@@ -74,6 +90,48 @@ class BST:
 
     def inorder(self):
         '''Return a list with the data items in order of inorder traversal.'''
+        lyst: list[self.Node] = []
+        if self._root:
+            self.inorder_recurive(self._root, lyst)
+        return lyst
+
+    def inorder_recurive(self, node: Node, lyst: list[Node]):
+        '''Helper for inorder traversal'''
+        if node.left:
+            self.inorder_recurive(node.left, lyst)
+        lyst.append(node.item)
+        if node.right:
+            self.inorder_recurive(node.right, lyst)
+            
 
     def preorder(self):
         '''Return a list with the data items in order of preorder traversal.'''
+        lyst: list[self.Node] = []
+        if self._root:
+            self.preorder_recurive(self._root, lyst)
+        return lyst
+
+    def preorder_recurive(self, node: Node, lyst: list[Node]):
+        '''Helper for preorder traversal'''
+        lyst.append(node.item)
+        if node.left:
+            self.preorder_recurive(node.left, lyst)
+        if node.right:
+            self.preorder_recurive(node.right, lyst)
+
+
+    def postorder(self):
+        '''Return a list with the data items in order of postorder traversal.'''
+        lyst: list[self.Node] = []
+        if self._root:
+            self.postorder_recurive(self._root, lyst)
+        return lyst
+
+    def postorder_recurive(self, node: Node, lyst: list[Node]):
+        '''Helper for postorder traversal'''
+        if node.left:
+            self.postorder_recurive(node.left, lyst)
+        if node.right:
+            self.postorder_recurive(node.right, lyst)
+        lyst.append(node.item)
+
