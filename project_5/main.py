@@ -72,17 +72,11 @@ def make_tree():
                         tree.add(Pair(c))
 
     return tree
-                
-
-
 
 
 def main():
-    ''' Program kicks off here.
-
-    '''
+    ''' Program kicks off here.'''
     tree = make_tree()
-    print(tree.inorder())
 
 
 if __name__ == "__main__":

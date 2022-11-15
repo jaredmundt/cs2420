@@ -1,4 +1,4 @@
-
+'''CS2420 binary search tree class'''
 
 class BST:
     '''binary search tree'''
@@ -10,6 +10,7 @@ class BST:
 
     class Node:
         '''node for holding values of bst'''
+
         def __init__(self, item) -> None:
             self.item = item
             self.left = None
@@ -21,11 +22,13 @@ class BST:
         return self._size
 
     def is_empty(self):
-        '''Return	True if there	aren't	any nodes in the	tree,	False	otherwise.'''
+        '''Return True if there aren't any nodes in the	tree, False	otherwise.'''
         return self._size == 0
-    
+
     def height(self):
-        '''Return the height of the tree, defined is the length of the path from the root to its deepest leaf. A tree with zero nodes has a height of - 1.'''
+        '''Return the height of the tree, defined is the length of
+        the path from the root to its deepest leaf.
+        A tree with zero nodes has a height of - 1.'''
         return self._height
 
     def add(self, item):
@@ -34,7 +37,7 @@ class BST:
         height = 0
         new_node = self.Node(item)
         if not self._root:
-            self._root = new_node 
+            self._root = new_node
         else:
             node = self._root
             while node:
@@ -54,26 +57,43 @@ class BST:
 
         self._height = max(self._height, height)
 
-
-
     def remove(self, item):
-        '''Remove item from the tree if it exists, if not - do nothing. Return the resulting tree.'''
+        '''Remove item from the tree if it exists,
+        if not - do nothing. Return the resulting tree.'''
         self._size -= 1
-        # if self._root:
-        #     if self._root.item == item:
+        self.remove_recursive(self._root, item)
+        return self
 
-        # parent = None
-        # node = self._root
-        # while node:
-        #     if node.left:
-        #         if item == node.left.item:
+    def remove_recursive(self, node: Node, item):
+        if not node:
+            return node
 
-        #     elif item < node.item:
-        #         node = node.left
-        #     else:
-        #         node = node.right
-        #     parent = node
-        # return self
+        if item < node.item:
+            node.left = self.remove_recursive(node.left, item)
+
+        elif item > node.item:
+            node.right = self.remove_recursive(node.right, item)
+
+        else:
+            if not node.left:
+                temp = node.right
+                node = None
+                return temp
+
+            if not node.right:
+                temp = node.left
+                node = None
+                return temp
+
+            temp: self.Node = node.right
+            while temp.left:
+                temp = temp.left
+
+            node.item = temp.item
+
+            node.right = self.remove_recursive(node.right, temp.item)
+
+        return node
 
     def find(self, item):
         '''Return the matched item. If item is not in the tree, raise a ValueError.'''
@@ -81,12 +101,11 @@ class BST:
         while node:
             if item == node.item:
                 return node.item
-            elif item < node.item:
+            if item < node.item:
                 node = node.left
             else:
                 node = node.right
         raise ValueError
-       
 
     def inorder(self):
         '''Return a list with the data items in order of inorder traversal.'''
@@ -102,7 +121,6 @@ class BST:
         lyst.append(node.item)
         if node.right:
             self.inorder_recurive(node.right, lyst)
-            
 
     def preorder(self):
         '''Return a list with the data items in order of preorder traversal.'''
@@ -119,7 +137,6 @@ class BST:
         if node.right:
             self.preorder_recurive(node.right, lyst)
 
-
     def postorder(self):
         '''Return a list with the data items in order of postorder traversal.'''
         lyst: list[self.Node] = []
@@ -134,4 +151,3 @@ class BST:
         if node.right:
             self.postorder_recurive(node.right, lyst)
         lyst.append(node.item)
-
